@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 import { connectToDatabase, ProductModel } from "@babani/db";
 
 function getMongoUri() {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) throw new Error("Missing MONGODB_URI");
-  return uri;
+  return process.env.MONGODB_URI;
 }
 
 export async function GET(_: Request, ctx: { params: Promise<{ id: string }> }) {
-  await connectToDatabase(getMongoUri());
+  const uri = getMongoUri();
+  if (!uri) return NextResponse.json({ error: "Configuration missing" }, { status: 500 });
+  await connectToDatabase(uri);
   const { id } = await ctx.params;
 
   if (!mongoose.isValidObjectId(id)) {
@@ -23,7 +23,9 @@ export async function GET(_: Request, ctx: { params: Promise<{ id: string }> }) 
 }
 
 export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }) {
-  await connectToDatabase(getMongoUri());
+  const uri = getMongoUri();
+  if (!uri) return NextResponse.json({ error: "Configuration missing" }, { status: 500 });
+  await connectToDatabase(uri);
   const { id } = await ctx.params;
   const body = await req.json();
 
@@ -38,7 +40,9 @@ export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }
 }
 
 export async function DELETE(_: Request, ctx: { params: Promise<{ id: string }> }) {
-  await connectToDatabase(getMongoUri());
+  const uri = getMongoUri();
+  if (!uri) return NextResponse.json({ error: "Configuration missing" }, { status: 500 });
+  await connectToDatabase(uri);
   const { id } = await ctx.params;
 
   if (!mongoose.isValidObjectId(id)) {

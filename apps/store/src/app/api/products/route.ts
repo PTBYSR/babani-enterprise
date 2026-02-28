@@ -2,19 +2,21 @@ import { NextResponse } from "next/server";
 import { connectToDatabase, ProductModel } from "@babani/db";
 
 function getMongoUri() {
-  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
-  if (!uri) throw new Error("Missing MONGODB_URI (or MONGO_URI)");
-  return uri;
+  return process.env.MONGODB_URI || process.env.MONGO_URI;
 }
 
 export async function GET() {
-  await connectToDatabase(getMongoUri());
+  const uri = getMongoUri();
+  if (!uri) return NextResponse.json({ products: [] });
+  await connectToDatabase(uri);
   const products = await ProductModel.find({ isActive: true }).sort({ createdAt: -1 });
   return NextResponse.json({ products });
 }
 
 export async function POST(req: Request) {
-  await connectToDatabase(getMongoUri());
+  const uri = getMongoUri();
+  if (!uri) return NextResponse.json({ error: "Configuration missing" }, { status: 500 });
+  await connectToDatabase(uri);
   const body = await req.json();
 
   const created = await ProductModel.create(body);

@@ -6,9 +6,7 @@ import { formatMoney } from "@/lib/format";
 import type { Product } from "@/lib/types";
 
 function getMongoUri() {
-  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
-  if (!uri) throw new Error("Missing MONGODB_URI (or MONGO_URI)");
-  return uri;
+  return process.env.MONGODB_URI || process.env.MONGO_URI;
 }
 
 function isValidUrl(url: string) {
@@ -18,7 +16,13 @@ function isValidUrl(url: string) {
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  await connectToDatabase(getMongoUri());
+  const uri = getMongoUri();
+  if (!uri) {
+    console.warn("MONGODB_URI is missing. Skipping database connection during build.");
+    notFound();
+  }
+
+  await connectToDatabase(uri);
   const doc = await ProductModel.findOne({ slug, isActive: true });
   if (!doc) notFound();
 

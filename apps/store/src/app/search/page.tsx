@@ -6,7 +6,10 @@ import { Search as SearchIcon } from "lucide-react";
 
 async function searchProducts(query: string): Promise<Product[]> {
     const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
-    if (!mongoUri) throw new Error("Missing MONGODB_URI");
+    if (!mongoUri) {
+        console.warn("MONGODB_URI is missing. Skipping search during build.");
+        return [];
+    }
 
     await connectToDatabase(mongoUri);
 

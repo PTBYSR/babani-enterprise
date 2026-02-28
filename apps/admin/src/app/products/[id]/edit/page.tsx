@@ -6,9 +6,7 @@ import { connectToDatabase, ProductModel } from "@babani/db";
 import type { Product } from "@/lib/types";
 
 function getMongoUri() {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) throw new Error("Missing MONGODB_URI");
-  return uri;
+  return process.env.MONGODB_URI;
 }
 
 async function saveUploadedFile(file: File): Promise<string> {
@@ -25,7 +23,12 @@ async function saveUploadedFile(file: File): Promise<string> {
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  await connectToDatabase(getMongoUri());
+  const uri = getMongoUri();
+  if (!uri) {
+    console.warn("MONGODB_URI is missing. Skipping database connection during build.");
+    notFound();
+  }
+  await connectToDatabase(uri);
   const doc = await ProductModel.findById(id);
   if (!doc) notFound();
 
@@ -52,7 +55,12 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
       }
     }
 
-    await connectToDatabase(getMongoUri());
+    const uri = getMongoUri();
+    if (!uri) {
+      console.error("MONGODB_URI is missing. Cannot update product.");
+      return;
+    }
+    await connectToDatabase(uri);
     await ProductModel.findByIdAndUpdate(id, { name, description, price, images }, { runValidators: true });
 
     redirect("/products");

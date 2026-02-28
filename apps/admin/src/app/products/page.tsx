@@ -5,13 +5,16 @@ import { connectToDatabase, ProductModel } from "@babani/db";
 import type { Product } from "@/lib/types";
 
 function getMongoUri() {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) throw new Error("Missing MONGODB_URI");
-  return uri;
+  return process.env.MONGODB_URI;
 }
 
 async function getProducts(): Promise<Product[]> {
-  await connectToDatabase(getMongoUri());
+  const uri = getMongoUri();
+  if (!uri) {
+    console.warn("MONGODB_URI is missing. Skipping database connection during build.");
+    return [];
+  }
+  await connectToDatabase(uri);
   const docs = await ProductModel.find({}).sort({ createdAt: -1 });
   return JSON.parse(JSON.stringify(docs)) as Product[];
 }
@@ -23,7 +26,12 @@ export default async function ProductsPage() {
     "use server";
     const id = String(formData.get("id") ?? "");
 
-    await connectToDatabase(getMongoUri());
+    const uri = getMongoUri();
+    if (!uri) {
+      console.error("MONGODB_URI is missing. Cannot delete product.");
+      return;
+    }
+    await connectToDatabase(uri);
     await ProductModel.findByIdAndDelete(id);
 
     revalidatePath("/products");

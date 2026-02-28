@@ -5,9 +5,7 @@ import path from "path";
 import { connectToDatabase, ProductModel } from "@babani/db";
 
 function getMongoUri() {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) throw new Error("Missing MONGODB_URI");
-  return uri;
+  return process.env.MONGODB_URI;
 }
 
 function slugify(text: string) {
@@ -52,7 +50,12 @@ export default function NewProductPage() {
       }
     }
 
-    await connectToDatabase(getMongoUri());
+    const uri = getMongoUri();
+    if (!uri) {
+      console.error("MONGODB_URI is missing. Cannot create product.");
+      return;
+    }
+    await connectToDatabase(uri);
     await ProductModel.create({ name, slug, description, price, images });
 
     redirect("/products");
