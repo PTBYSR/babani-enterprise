@@ -1,0 +1,23 @@
+export type Product = {
+  _id: string;
+  name: string;
+  slug: string;
+  brand: string;
+  description: string;
+  notes?: {
+    top: string[];
+    heart: string[];
+    base: string[];
+  };
+  price: number;
+  currency: string;
+  sizeMl: number;
+  concentration: string;
+  image: {
+    url: string;
+    alt: string;
+  };
+  images?: { url: string }[];
+  intensity?: number;
+  isActive: boolean;
+};

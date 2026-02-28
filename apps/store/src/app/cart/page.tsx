@@ -1,0 +1,126 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { useMemo } from "react";
+import { useCart } from "@/components/cart/CartProvider";
+import { formatMoney } from "@/lib/format";
+
+export default function CartPage() {
+  const cart = useCart();
+
+  const subtotal = useMemo(() => {
+    return cart.lines.reduce((sum, l) => sum + l.product.price * l.qty, 0);
+  }, [cart.lines]);
+
+  return (
+    <div>
+      <div className="flex items-end justify-between gap-6">
+        <div>
+          <div className="text-xs uppercase tracking-[0.22em] text-black/60">Cart</div>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight">Your selections</h1>
+        </div>
+        {cart.lines.length > 0 ? (
+          <button
+            type="button"
+            onClick={() => cart.clear()}
+            className="text-xs uppercase tracking-[0.22em] text-black/60 hover:text-black"
+          >
+            Clear
+          </button>
+        ) : null}
+      </div>
+
+      {cart.lines.length === 0 ? (
+        <div className="mt-10 rounded-3xl border border-black/10 p-10">
+          <div className="text-sm text-black/70">Your cart is empty.</div>
+          <Link
+            href="/"
+            className="mt-6 inline-flex rounded-full bg-black px-6 py-3 text-xs font-medium uppercase tracking-[0.22em] text-white hover:bg-black/90"
+          >
+            Continue shopping
+          </Link>
+        </div>
+      ) : (
+        <div className="mt-10 grid gap-10 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <div className="grid gap-4">
+              {cart.lines.map((l) => (
+                <div key={l.product._id} className="flex gap-4 rounded-3xl border border-black/10 p-4">
+                  <div className="relative h-24 w-20 overflow-hidden rounded-2xl bg-black/[0.03]">
+                    <Image src={l.product.image.url} alt={l.product.image.alt} fill className="object-cover" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-[11px] uppercase tracking-[0.22em] text-black/60">{l.product.brand}</div>
+                    <div className="mt-1 text-sm font-medium">{l.product.name}</div>
+                    <div className="mt-2 text-xs text-black/60">
+                      {l.product.sizeMl}ml · {l.product.concentration}
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          className="h-9 w-9 rounded-full border border-black/15 text-sm hover:border-black/30"
+                          onClick={() => cart.setQty(l.product._id, l.qty - 1)}
+                        >
+                          −
+                        </button>
+                        <div className="min-w-10 text-center text-sm">{l.qty}</div>
+                        <button
+                          type="button"
+                          className="h-9 w-9 rounded-full border border-black/15 text-sm hover:border-black/30"
+                          onClick={() => cart.setQty(l.product._id, l.qty + 1)}
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="rounded-full border border-black/15 px-3 py-2 text-xs uppercase tracking-[0.22em] text-black/70 hover:border-black/30"
+                        onClick={() => cart.remove(l.product._id)}
+                      >
+                        Remove
+                      </button>
+
+                      <div className="text-sm font-medium">
+                        {formatMoney(l.product.price * l.qty, l.product.currency)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="sticky top-6 h-fit rounded-3xl border border-black/10 p-6">
+            <div className="text-xs uppercase tracking-[0.22em] text-black/60">Summary</div>
+            <div className="mt-4 flex items-center justify-between text-sm">
+              <span className="text-black/70">Subtotal</span>
+              <span className="font-medium">{formatMoney(subtotal)}</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between text-sm">
+              <span className="text-black/70">Shipping</span>
+              <span className="font-medium">Calculated at checkout</span>
+            </div>
+            <div className="mt-6 border-t border-black/10 pt-6">
+              <Link
+                href="/checkout"
+                className="inline-flex w-full justify-center rounded-full bg-black px-6 py-3 text-xs font-medium uppercase tracking-[0.22em] text-white hover:bg-black/90"
+              >
+                Checkout
+              </Link>
+              <Link
+                href="/"
+                className="mt-3 inline-flex w-full justify-center rounded-full border border-black/15 px-6 py-3 text-xs font-medium uppercase tracking-[0.22em] text-black/80 hover:border-black/30"
+              >
+                Continue shopping
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

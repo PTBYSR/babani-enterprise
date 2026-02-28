@@ -1,0 +1,20 @@
+{
+  "name": "babani",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:store": "npm run dev -w apps/store",
+    "dev:admin": "npm run dev -w apps/admin",
+    "seed": "node --env-file=.env scripts/seed.mjs",
+    "build": "npm run build -ws",
+    "lint": "npm run lint -ws"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
