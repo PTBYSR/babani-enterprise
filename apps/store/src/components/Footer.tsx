@@ -1,12 +1,19 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   return (
     <footer className="border-t border-black/10">
       <div className="mx-auto grid max-w-6xl gap-6 px-6 py-10 md:grid-cols-2">
         <div>
-          <div className="text-xs font-semibold tracking-[0.35em]">BABANI</div>
-          <div className="mt-3 max-w-md text-sm text-black/60">
+          <Image
+            src="/BABANI.png"
+            alt="Babani Logo"
+            width={80}
+            height={24}
+            className="mb-4 object-contain"
+          />
+          <div className="max-w-md text-sm text-black/60">
             Minimal, premium fragrances. Quiet luxury, crafted for everyday ritual.
           </div>
         </div>
@@ -17,11 +24,14 @@ export function Footer() {
           <Link className="hover:text-black" href="/terms">
             Terms
           </Link>
-          <Link className="hover:text-black" href="/shipping-policy">
-            Shipping
+          <Link className="hover:text-black" href="/delivery-policy">
+            Delivery
           </Link>
           <Link className="hover:text-black" href="/contact">
             Contact
+          </Link>
+          <Link className="hover:text-black" href="/about">
+            About Us
           </Link>
         </div>
       </div>

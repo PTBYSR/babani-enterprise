@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 import { useCart } from "@/components/cart/CartProvider";
 import { SearchBox } from "@/components/SearchBox";
@@ -12,8 +13,15 @@ export function Header() {
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-black/5">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <div className="flex items-center gap-8">
-          <Link href="/" className="tracking-[0.35em] text-sm font-bold">
-            BABANI
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/BABANI.png"
+              alt="Babani Logo"
+              width={100}
+              height={30}
+              className="object-contain"
+              priority
+            />
           </Link>
           <div className="hidden md:block">
             <SearchBox />
@@ -24,8 +32,11 @@ export function Header() {
           <div className="md:hidden">
             <SearchBox />
           </div>
-          <Link className="hover:text-black transition-colors" href="/">
-            Shop
+          <Link className="hover:text-black transition-colors" href="/contact">
+            Contact
+          </Link>
+          <Link className="hover:text-black transition-colors" href="/about">
+            About Us
           </Link>
           <button type="button" className="hover:text-black transition-colors flex items-center" onClick={() => cart.open()}>
             CART
@@ -35,9 +46,6 @@ export function Header() {
               </span>
             ) : null}
           </button>
-          <Link className="hover:text-black transition-colors" href="/contact">
-            Contact
-          </Link>
         </nav>
       </div>
     </header>

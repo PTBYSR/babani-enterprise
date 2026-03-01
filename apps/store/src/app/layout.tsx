@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { PreFooter } from "@/components/PreFooter";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { MiniCartDrawer } from "@/components/cart/MiniCartDrawer";
 import { Toast } from "@/components/cart/Toast";
@@ -33,9 +34,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-black`}
       >
         <CartProvider>
-          <div className="min-h-dvh">
+          <div className="min-h-dvh flex flex-col">
             <Header />
-            <div className="mx-auto max-w-6xl px-6 py-10">{children}</div>
+            <div className="mx-auto max-w-6xl w-full px-6 py-10 flex-grow">{children}</div>
+            <PreFooter />
             <Footer />
             <MiniCartDrawer />
             <Toast />
