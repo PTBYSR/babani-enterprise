@@ -27,7 +27,7 @@ export default async function Home() {
   return (
     <div>
       {/* Mobile-only Search Box positioned below the header on the homepage */}
-      <div className="md:hidden mb-8 w-full border-b border-black/5 pb-6">
+      <div className="md:hidden sticky top-[72px] z-30 mb-8 w-full border-b border-black/5 bg-white/90 backdrop-blur-md pb-4 pt-2 -mt-4">
         <SearchBox />
       </div>
 

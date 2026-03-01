@@ -90,12 +90,7 @@ export function SearchBox() {
 
     return (
         <div ref={containerRef} className="relative w-full max-w-sm">
-            <div
-                className={cn(
-                    "group relative flex items-center transition-all duration-300 ease-in-out",
-                    isOpen ? "w-full" : "w-10 sm:w-64"
-                )}
-            >
+            <div className="group relative w-full flex items-center">
                 <div className="absolute left-3 text-black/40 group-focus-within:text-black transition-colors">
                     <Search size={16} strokeWidth={2.5} />
                 </div>
@@ -111,11 +106,7 @@ export function SearchBox() {
                     onFocus={() => setIsOpen(true)}
                     onKeyDown={handleKeyDown}
                     placeholder="Search fragrances..."
-                    className={cn(
-                        "h-10 w-full rounded-full bg-black/5 pl-10 pr-10 text-sm outline-hidden transition-all placeholder:text-black/30",
-                        "focus:bg-white focus:ring-1 focus:ring-black/10 focus:shadow-[0_4px_20px_rgba(0,0,0,0.05)]",
-                        !isOpen && "sm:bg-transparent sm:hover:bg-black/5"
-                    )}
+                    className="h-10 w-full rounded-full bg-black/5 pl-10 pr-10 text-sm outline-hidden transition-all placeholder:text-black/30 focus:bg-white focus:ring-1 focus:ring-black/10 focus:shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:bg-black/10 focus:hover:bg-white"
                 />
                 {(query || isLoading) && (
                     <button
