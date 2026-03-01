@@ -4,6 +4,7 @@ import { connectToDatabase, ProductModel } from "@babani/db";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { formatMoney } from "@/lib/format";
 import type { Product } from "@/lib/types";
+import { ReadMoreText } from "@/components/ReadMoreText";
 
 function getMongoUri() {
   return process.env.MONGODB_URI || process.env.MONGO_URI;
@@ -122,7 +123,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
           {/* Description + price + cart */}
           <div className="rounded-3xl border border-black/10 p-5">
-            <div className="text-sm leading-7 text-black/70">{product.description}</div>
+            <ReadMoreText text={product.description} />
             <div className="mt-4 flex items-center justify-between">
               <div className="text-base font-semibold">{formatMoney(product.price, product.currency)}</div>
             </div>

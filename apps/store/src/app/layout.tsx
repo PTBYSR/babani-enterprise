@@ -7,6 +7,7 @@ import { PreFooter } from "@/components/PreFooter";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { MiniCartDrawer } from "@/components/cart/MiniCartDrawer";
 import { Toast } from "@/components/cart/Toast";
+import { FloatingWhatsAppWidget } from "@/components/FloatingWhatsAppWidget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
             <Footer />
             <MiniCartDrawer />
             <Toast />
+            <FloatingWhatsAppWidget />
           </div>
         </CartProvider>
       </body>

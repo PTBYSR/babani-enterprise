@@ -43,7 +43,14 @@ export function MiniCartDrawer() {
             {cart.lines.map((l) => (
               <div key={l.product._id} className="flex gap-3 rounded-3xl border border-black/10 p-3">
                 <div className="relative h-16 w-14 overflow-hidden rounded-2xl bg-black/[0.03]">
-                  <Image src={l.product.image.url} alt={l.product.image.alt} fill className="object-cover" />
+                  {(() => {
+                    const imgUrl = l.product.images?.[0]?.url ?? l.product.image?.url ?? "";
+                    const valid = imgUrl.startsWith("/") || (() => { try { new URL(imgUrl); return true; } catch { return false; } })();
+                    if (!valid) return null;
+                    return (
+                      <Image src={imgUrl} alt={l.product.name} fill className="object-cover" />
+                    );
+                  })()}
                 </div>
                 <div className="flex-1">
                   <div className="text-sm font-medium">{l.product.name}</div>
@@ -83,13 +90,30 @@ export function MiniCartDrawer() {
                 <span className="font-semibold">{formatMoney(subtotal)}</span>
               </div>
               <div className="mt-4 grid gap-2">
-                <Link
-                  href="/checkout"
-                  onClick={() => cart.close()}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const phoneNumber = "2349018210296"; // You can change this to your actual number
+                    let message = `*NEW ORDER*\n\n`;
+                    message += `Hi, I would like to place an order for the following items:\n\n`;
+
+                    cart.lines.forEach((l, index) => {
+                      message += `${index + 1}. *${l.product.name}* (${l.product.sizeMl}ml ${l.product.concentration})\n`;
+                      message += `   Quantity: ${l.qty}\n`;
+                      message += `   Price: ${formatMoney(l.product.price * l.qty, l.product.currency)}\n`;
+                    });
+
+                    message += `\n*Subtotal: ${formatMoney(subtotal)}*\n\n`;
+                    message += `Please confirm my order.`;
+
+                    const encodedMessage = encodeURIComponent(message);
+                    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
+                    cart.close();
+                  }}
                   className="inline-flex w-full justify-center rounded-full bg-black px-6 py-3 text-xs font-medium uppercase tracking-[0.22em] text-white hover:bg-black/90"
                 >
-                  Checkout
-                </Link>
+                  Checkout to WhatsApp
+                </button>
                 <Link
                   href="/cart"
                   onClick={() => cart.close()}
