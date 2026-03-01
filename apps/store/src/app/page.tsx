@@ -19,11 +19,18 @@ async function getProducts(): Promise<Product[]> {
   return JSON.parse(JSON.stringify(docs)) as Product[];
 }
 
+import { SearchBox } from "@/components/SearchBox";
+
 export default async function Home() {
   const products = await getProducts();
 
   return (
     <div>
+      {/* Mobile-only Search Box positioned below the header on the homepage */}
+      <div className="md:hidden mb-8 w-full border-b border-black/5 pb-6">
+        <SearchBox />
+      </div>
+
       <div className="flex flex-col gap-3">
         <div className="text-xs uppercase tracking-[0.22em] text-black/60">Fine Fragrance</div>
         <h1 className="text-3xl font-semibold tracking-tight">Quiet luxury, bottled.</h1>
