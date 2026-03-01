@@ -170,7 +170,7 @@ export function SearchBox() {
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <span className="text-xs font-semibold text-black/60">
-                                                €{product.price}
+                                                ₦{product.price}
                                             </span>
                                             <ArrowRight
                                                 size={14}

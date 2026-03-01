@@ -12,7 +12,7 @@ const ProductSchema = new Schema(
       base: { type: [String], default: [] }
     },
     price: { type: Number, required: true, min: 0 },
-    currency: { type: String, default: "EUR" },
+    currency: { type: String, default: "NGN" },
     sizeMl: { type: Number, default: 50 },
     concentration: { type: String, default: "Fragrance" },
     image: {

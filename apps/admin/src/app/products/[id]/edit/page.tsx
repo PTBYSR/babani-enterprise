@@ -9,15 +9,11 @@ function getMongoUri() {
   return process.env.MONGODB_URI;
 }
 
+import { put } from "@vercel/blob";
+
 async function saveUploadedFile(file: File): Promise<string> {
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const ext = file.name.split(".").pop() ?? "jpg";
-  const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const uploadsDir = path.join(process.cwd(), "..", "store", "public", "uploads");
-  await mkdir(uploadsDir, { recursive: true });
-  await writeFile(path.join(uploadsDir, filename), buffer);
-  return `/uploads/${filename}`;
+  const { url } = await put(file.name, file, { access: 'public' });
+  return url;
 }
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
@@ -103,7 +99,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
         {/* Price */}
         <label className="grid gap-2 text-sm">
-          <span className="font-medium text-black/80">Price (EUR)</span>
+          <span className="font-medium text-black/80">Price (NGN)</span>
           <input
             name="price"
             type="number"

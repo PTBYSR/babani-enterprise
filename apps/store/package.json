@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@babani/db": "0.0.1",
+    "@vercel/blob": "^2.3.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.575.0",
     "mongoose": "^8.10.0",

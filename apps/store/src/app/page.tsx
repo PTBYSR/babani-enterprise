@@ -2,6 +2,8 @@ import { ProductCard } from "@/components/ProductCard";
 import type { Product } from "@/lib/types";
 import { connectToDatabase, ProductModel } from "@babani/db";
 
+export const dynamic = "force-dynamic";
+
 function getMongoUri() {
   return process.env.MONGODB_URI || process.env.MONGO_URI;
 }
