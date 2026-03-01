@@ -27,9 +27,8 @@ export default function AboutPage() {
                         className="block relative w-full overflow-hidden rounded-xl border border-black/5 hover:opacity-90 transition-opacity"
                     >
                         {/* We use an image here for better browser compatibility. */}
-                        {/* Make sure to save a screenshot of your PDF as CERTIFICATE.png in the apps/store/public folder. */}
                         <Image
-                            src="/CERTIFICATE.png"
+                            src="/cert-img.jpg"
                             alt="Babani Enterprise Official Certificate"
                             width={800}
                             height={1131}
