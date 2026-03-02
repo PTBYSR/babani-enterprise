@@ -24,7 +24,11 @@ const ProductSchema = new Schema(
       default: []
     },
     intensity: { type: Number, default: 50, min: 0, max: 100 },
-    isActive: { type: Boolean, default: true }
+    isActive: { type: Boolean, default: true },
+    likesCount: { type: Number, default: 0 },
+    likedByIps: { type: [String], default: [] },
+    averageRating: { type: Number, default: 0 },
+    totalReviews: { type: Number, default: 0 }
   },
   { timestamps: true }
 );

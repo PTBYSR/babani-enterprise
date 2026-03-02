@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { connectToDatabase, ProductModel } from "@babani/db";
+import { connectToDatabase, ProductModel, ReviewModel } from "@babani/db";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { formatMoney } from "@/lib/format";
 import type { Product } from "@/lib/types";
 import { ReadMoreText } from "@/components/ReadMoreText";
+import { LikeButton } from "@/components/LikeButton";
+import { RatingStars } from "@/components/RatingStars";
+import { headers } from "next/headers";
 
 function getMongoUri() {
   return process.env.MONGODB_URI || process.env.MONGO_URI;
@@ -39,10 +42,18 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const intensity = product.intensity ?? 50;
   const intensityLabel = intensity < 30 ? "Moderate" : intensity < 70 ? "Balanced" : "Beast Mode";
 
-  const rating = 4.2 + ((product.slug.length % 6) * 0.1);
-  const ratingRounded = Math.round(rating * 10) / 10;
-  const ratingsCount = 3500 + (product.slug.length * 173);
-  const likes = 65000 + (product.slug.length * 4900);
+  const headersList = await headers();
+  const forwardedFor = headersList.get("x-forwarded-for");
+  const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "unknown-ip";
+
+  const hasLiked = product.likedByIps?.includes(ip) || false;
+  const likesCount = product.likesCount || 0;
+
+  const userReview = await ReviewModel.findOne({ productId: product._id, ipAddress: ip });
+  const initialUserRating = userReview?.rating || null;
+
+  const averageRating = product.averageRating || 0;
+  const totalReviews = product.totalReviews || 0;
 
   const initials = product.name
     .split(" ")
@@ -102,24 +113,20 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <div className="text-xs uppercase tracking-[0.22em] text-black/60">{product.brand}</div>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight">{product.name}</h1>
             </div>
-            <div className="flex items-center gap-2 rounded-full border border-black/10 bg-white px-4 py-2 text-sm">
-              <div className="text-black/60">♡</div>
-              <div className="tabular-nums">{likes.toLocaleString("en-GB")}</div>
-            </div>
+            <LikeButton
+              productId={product._id}
+              initialLikes={likesCount}
+              initialHasLiked={hasLiked}
+            />
           </div>
 
           {/* Rating */}
-          <div className="grid grid-cols-[auto_1fr] items-center gap-x-6 gap-y-2">
-            <div className="text-3xl font-semibold tabular-nums">{ratingRounded}</div>
-            <div>
-              <div className="flex items-center gap-1 text-black">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <span key={i} className={i < Math.round(ratingRounded) ? "" : "text-black/20"}>★</span>
-                ))}
-              </div>
-              <div className="text-sm text-black/60">({ratingsCount.toLocaleString("en-GB")} ratings)</div>
-            </div>
-          </div>
+          <RatingStars
+            productId={product._id}
+            initialRating={averageRating}
+            initialCount={totalReviews}
+            initialUserRating={initialUserRating}
+          />
 
           {/* Description + price + cart */}
           <div className="rounded-3xl border border-black/10 p-5">

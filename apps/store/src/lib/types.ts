@@ -20,4 +20,8 @@ export type Product = {
   images?: { url: string }[];
   intensity?: number;
   isActive: boolean;
+  likesCount?: number;
+  likedByIps?: string[];
+  averageRating?: number;
+  totalReviews?: number;
 };
