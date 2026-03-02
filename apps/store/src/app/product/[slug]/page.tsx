@@ -8,6 +8,37 @@ import { ReadMoreText } from "@/components/ReadMoreText";
 import { LikeButton } from "@/components/LikeButton";
 import { RatingStars } from "@/components/RatingStars";
 import { headers } from "next/headers";
+import type { Metadata } from "next";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
+  if (!uri) return {};
+
+  await connectToDatabase(uri);
+  const product = await ProductModel.findOne({ slug, isActive: true });
+  if (!product) return { title: "Product Not Found" };
+
+  const primaryImage = product.images?.[0]?.url || product.image?.url || "/BABANI.png";
+  const fullImageUrl = primaryImage.startsWith("http") ? primaryImage : `https://babani-store.vercel.app${primaryImage}`;
+
+  return {
+    title: `${product.name} | Babani Luxury Fragrances`,
+    description: product.description.slice(0, 160) + "...",
+    openGraph: {
+      title: product.name,
+      description: product.description.slice(0, 160),
+      images: [{ url: fullImageUrl }],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description: product.description.slice(0, 160),
+      images: [fullImageUrl],
+    },
+  };
+}
 
 function getMongoUri() {
   return process.env.MONGODB_URI || process.env.MONGO_URI;

@@ -20,8 +20,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Babani — Perfume Store",
-  description: "Minimal, premium fragrances.",
+  title: "Babani — Luxury Fragrance Store",
+  description: "Experience the art of scent with Babani. Minimal, premium fragrances for those who appreciate the finer things.",
+  metadataBase: new URL("https://babani-store.vercel.app"), // Placeholder, update if you have a custom domain
+  openGraph: {
+    title: "Babani — Luxury Fragrance Store",
+    description: "Experience the art of scent with Babani. Minimal, premium fragrances.",
+    url: "https://babani-store.vercel.app",
+    siteName: "Babani",
+    images: [
+      {
+        url: "/BABANI.png",
+        width: 1200,
+        height: 630,
+        alt: "Babani Logo",
+      },
+    ],
+    locale: "en_GB",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Babani — Luxury Fragrance Store",
+    description: "Minimal, premium fragrances.",
+    images: ["/BABANI.png"],
+  },
+  icons: {
+    icon: "/next.svg", // Using existing next.svg as placeholder icon, recommend replacing with BABANI.png later
+  },
 };
 
 export default function RootLayout({
