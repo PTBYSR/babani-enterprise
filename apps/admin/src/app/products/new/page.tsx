@@ -21,7 +21,7 @@ function slugify(text: string) {
   );
 }
 async function saveUploadedFile(file: File): Promise<string> {
-  const { url } = await put(file.name, file, { access: 'public' });
+  const { url } = await put(file.name, file, { access: 'public', addRandomSuffix: true });
   return url;
 }
 
