@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase, ProductModel, ReviewModel } from "@babani/db";
 import { headers } from "next/headers";
+import mongoose from "mongoose";
 
 function getMongoUri() {
     return process.env.MONGODB_URI || process.env.MONGO_URI;
