@@ -4,6 +4,7 @@ import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { connectToDatabase, ProductModel } from "@babani/db";
 import type { Product } from "@/lib/types";
+import { SubmitButton } from "@/components/SubmitButton";
 
 function getMongoUri() {
   return process.env.MONGODB_URI;
@@ -74,7 +75,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         </Link>
       </div>
 
-      <form action={updateProduct} className="mt-10 grid gap-6 rounded-3xl border border-black/10 p-8">
+      <form action={updateProduct} className="mt-10 grid gap-6 rounded-3xl border border-black/10 p-5 md:p-8">
         {/* Title */}
         <label className="grid gap-2 text-sm">
           <span className="font-medium text-black/80">Title</span>
@@ -159,12 +160,12 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
           </div>
         </div>
 
-        <button
-          type="submit"
+        <SubmitButton
           className="mt-2 inline-flex justify-center rounded-full bg-black px-8 py-3 text-xs font-medium uppercase tracking-[0.22em] text-white hover:bg-black/80 transition-colors"
+          pendingText="Saving..."
         >
           Save changes
-        </button>
+        </SubmitButton>
       </form>
     </div>
   );

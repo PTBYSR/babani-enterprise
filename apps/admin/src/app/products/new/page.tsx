@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { put } from "@vercel/blob";
 import { connectToDatabase, ProductModel } from "@babani/db";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export const dynamic = "force-dynamic";
 
@@ -67,7 +68,7 @@ export default function NewProductPage() {
         </Link>
       </div>
 
-      <form action={createProduct} className="mt-10 grid gap-6 rounded-3xl border border-black/10 p-8">
+      <form action={createProduct} className="mt-10 grid gap-6 rounded-3xl border border-black/10 p-5 md:p-8">
         {/* Title */}
         <label className="grid gap-2 text-sm">
           <span className="font-medium text-black/80">Title</span>
@@ -122,12 +123,12 @@ export default function NewProductPage() {
           </div>
         </div>
 
-        <button
-          type="submit"
+        <SubmitButton
           className="mt-2 inline-flex justify-center rounded-full bg-black px-8 py-3 text-xs font-medium uppercase tracking-[0.22em] text-white hover:bg-black/80 transition-colors"
+          pendingText="Creating..."
         >
           Create product
-        </button>
+        </SubmitButton>
       </form>
     </div>
   );

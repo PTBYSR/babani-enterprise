@@ -1,3 +1,5 @@
+import { SubmitButton } from "@/components/SubmitButton";
+
 export default function LoginPage() {
   return (
     <div className="mx-auto max-w-md rounded-3xl border border-black/10 bg-white p-6">
@@ -15,12 +17,11 @@ export default function LoginPage() {
           />
         </label>
 
-        <button
-          type="submit"
+        <SubmitButton
           className="inline-flex justify-center rounded-full bg-black px-6 py-3 text-xs font-medium uppercase tracking-[0.22em] text-white hover:bg-black/90"
         >
           Continue
-        </button>
+        </SubmitButton>
       </form>
     </div>
   );
