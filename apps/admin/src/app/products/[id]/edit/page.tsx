@@ -83,7 +83,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         </Link>
       </div>
 
-      <form action={updateProduct} className="mt-10 grid gap-6 rounded-3xl border border-black/10 p-5 md:p-8 overflow-hidden">
+      <form action={updateProduct} className="mt-10 flex flex-col gap-6 rounded-3xl border border-black/10 p-5 md:p-8 overflow-hidden">
         {/* Title */}
         <label className="flex flex-col gap-2 text-sm">
           <span className="font-medium text-black/80">Title</span>
@@ -122,7 +122,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
 
         {/* Existing images */}
         {existingImages.length > 0 && (
-          <div className="grid gap-3 text-sm">
+          <div className="flex flex-col gap-3 text-sm">
             <span className="font-medium text-black/80">Current images</span>
             <div className="flex flex-wrap gap-3">
               {existingImages.map((img, i) => {
@@ -148,12 +148,12 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         )}
 
         {/* Upload new images */}
-        <div className="grid gap-3 text-sm">
+        <div className="flex flex-col gap-3 text-sm">
           <span className="font-medium text-black/80">
             {existingImages.length > 0 ? "Replace / add images" : "Images"}
             <span className="ml-1 font-normal text-black/40">(up to {3 - Math.min(existingImages.length, 3)} new)</span>
           </span>
-          <div className="grid gap-3 rounded-2xl border border-black/10 bg-black/[0.01] p-4">
+          <div className="flex flex-col gap-3 rounded-2xl border border-black/10 bg-black/[0.01] p-4">
             {Array.from({ length: Math.max(1, 3 - existingImages.length) }).map((_, i) => (
               <label key={i} className="flex items-center gap-3 cursor-pointer">
                 <span className="w-5 text-right text-xs text-black/40">{existingImages.length + i + 1}.</span>

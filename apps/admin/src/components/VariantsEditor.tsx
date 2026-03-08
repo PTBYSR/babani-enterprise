@@ -87,7 +87,7 @@ export function VariantsEditor({ initialVariants = [] }: VariantsEditorProps) {
         }));
 
     return (
-        <div className="grid gap-4 text-sm">
+        <div className="flex flex-col gap-4 text-sm">
             <span className="font-medium text-black/80">Variants</span>
 
             {/* Hidden input to send JSON to server action */}
@@ -101,9 +101,9 @@ export function VariantsEditor({ initialVariants = [] }: VariantsEditorProps) {
                     >
                         {editingIdx === optIdx ? (
                             /* ─── Editing mode ─── */
-                            <div className="grid gap-4">
+                            <div className="flex flex-col gap-4">
                                 {/* Option name */}
-                                <div className="grid gap-1">
+                                <div className="flex flex-col gap-1">
                                     <label className="text-xs font-medium text-black/60">
                                         Option name
                                     </label>
@@ -117,11 +117,11 @@ export function VariantsEditor({ initialVariants = [] }: VariantsEditorProps) {
                                 </div>
 
                                 {/* Option values */}
-                                <div className="grid gap-1">
+                                <div className="flex flex-col gap-1">
                                     <label className="text-xs font-medium text-black/60">
                                         Option values
                                     </label>
-                                    <div className="grid gap-2">
+                                    <div className="flex flex-col gap-2">
                                         {opt.values.map((val, valIdx) => (
                                             <div key={valIdx} className="flex flex-wrap items-center gap-2">
                                                 <input

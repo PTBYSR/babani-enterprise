@@ -76,7 +76,7 @@ export default function NewProductPage() {
         </Link>
       </div>
 
-      <form action={createProduct} className="mt-10 grid gap-6 rounded-3xl border border-black/10 p-5 md:p-8 overflow-hidden">
+      <form action={createProduct} className="mt-10 flex flex-col gap-6 rounded-3xl border border-black/10 p-5 md:p-8 overflow-hidden">
         {/* Title */}
         <label className="flex flex-col gap-2 text-sm">
           <span className="font-medium text-black/80">Title</span>
@@ -114,9 +114,9 @@ export default function NewProductPage() {
         </label>
 
         {/* Images */}
-        <div className="grid gap-3 text-sm">
+        <div className="flex flex-col gap-3 text-sm">
           <span className="font-medium text-black/80">Images <span className="font-normal text-black/40">(up to 3)</span></span>
-          <div className="grid gap-3 rounded-2xl border border-black/10 bg-black/[0.01] p-4">
+          <div className="flex flex-col gap-3 rounded-2xl border border-black/10 bg-black/[0.01] p-4">
             {[1, 2, 3].map((n) => (
               <label key={n} className="flex items-center gap-3 cursor-pointer">
                 <span className="w-5 text-right text-xs text-black/40">{n}.</span>
