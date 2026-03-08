@@ -78,36 +78,36 @@ export default function NewProductPage() {
 
       <form action={createProduct} className="mt-10 grid gap-6 rounded-3xl border border-black/10 p-5 md:p-8 overflow-hidden">
         {/* Title */}
-        <label className="grid gap-2 text-sm min-w-0">
+        <label className="flex flex-col gap-2 text-sm">
           <span className="font-medium text-black/80">Title</span>
           <input
             name="name"
-            className="h-11 w-full rounded-2xl border border-black/15 px-4 focus:border-black/40 focus:outline-none"
+            className="block h-11 w-full min-w-0 rounded-2xl border border-black/15 px-4 focus:border-black/40 focus:outline-none"
             placeholder="e.g. Midnight Rose"
             required
           />
         </label>
 
         {/* Description */}
-        <label className="grid gap-2 text-sm min-w-0">
+        <label className="flex flex-col gap-2 text-sm">
           <span className="font-medium text-black/80">Description</span>
           <textarea
             name="description"
-            className="min-h-32 w-full rounded-2xl border border-black/15 px-4 py-3 focus:border-black/40 focus:outline-none"
+            className="block min-h-32 w-full min-w-0 rounded-2xl border border-black/15 px-4 py-3 focus:border-black/40 focus:outline-none"
             placeholder="Describe the fragrance…"
             required
           />
         </label>
 
         {/* Price */}
-        <label className="grid gap-2 text-sm min-w-0">
+        <label className="flex flex-col gap-2 text-sm">
           <span className="font-medium text-black/80">Price (NGN)</span>
           <input
             name="price"
             type="number"
             min="0"
             step="0.01"
-            className="h-11 w-full rounded-2xl border border-black/15 px-4 focus:border-black/40 focus:outline-none"
+            className="block h-11 w-full min-w-0 rounded-2xl border border-black/15 px-4 focus:border-black/40 focus:outline-none"
             placeholder="0.00"
             required
           />
