@@ -24,6 +24,19 @@ const ProductSchema = new Schema(
       default: []
     },
     intensity: { type: Number, default: 50, min: 0, max: 100 },
+    variants: {
+      type: [{
+        optionName: { type: String, required: true, trim: true },
+        values: {
+          type: [{
+            label: { type: String, required: true, trim: true },
+            price: { type: Number, required: true, min: 0 },
+          }],
+          default: [],
+        },
+      }],
+      default: [],
+    },
     isActive: { type: Boolean, default: true },
     likesCount: { type: Number, default: 0 },
     likedByIps: { type: [String], default: [] },

@@ -9,7 +9,10 @@ export default function CheckoutPage() {
   const cart = useCart();
   const [submitted, setSubmitted] = useState(false);
 
-  const subtotal = useMemo(() => cart.lines.reduce((sum, l) => sum + l.product.price * l.qty, 0), [cart.lines]);
+  const subtotal = useMemo(() => cart.lines.reduce((sum, l) => {
+    const price = l.selectedVariant?.price ?? l.product.price;
+    return sum + price * l.qty;
+  }, 0), [cart.lines]);
 
   if (cart.lines.length === 0 && !submitted) {
     return (
@@ -98,14 +101,21 @@ export default function CheckoutPage() {
       <div className="h-fit rounded-3xl border border-black/10 p-6">
         <div className="text-xs uppercase tracking-[0.22em] text-black/60">Order summary</div>
         <div className="mt-4 grid gap-3">
-          {cart.lines.map((l) => (
-            <div key={l.product._id} className="flex items-start justify-between gap-3 text-sm">
-              <div className="text-black/70">
-                {l.product.name} <span className="text-black/40">× {l.qty}</span>
+          {cart.lines.map((l) => {
+            const linePrice = l.selectedVariant?.price ?? l.product.price;
+            return (
+              <div key={l.product._id + (l.selectedVariant?.value ?? '')} className="flex items-start justify-between gap-3 text-sm">
+                <div className="text-black/70">
+                  {l.product.name}
+                  {l.selectedVariant && (
+                    <span className="text-black/40"> ({l.selectedVariant.optionName}: {l.selectedVariant.value})</span>
+                  )}
+                  {' '}<span className="text-black/40">× {l.qty}</span>
+                </div>
+                <div className="font-medium">{formatMoney(linePrice * l.qty, l.product.currency)}</div>
               </div>
-              <div className="font-medium">{formatMoney(l.product.price * l.qty, l.product.currency)}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-6 border-t border-black/10 pt-6">

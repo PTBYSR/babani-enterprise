@@ -19,6 +19,10 @@ export type Product = {
   };
   images?: { url: string }[];
   intensity?: number;
+  variants?: {
+    optionName: string;
+    values: { label: string; price: number }[];
+  }[];
   isActive: boolean;
   likesCount?: number;
   likedByIps?: string[];

@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { connectToDatabase, ProductModel, ReviewModel } from "@babani/db";
-import { AddToCartButton } from "@/components/cart/AddToCartButton";
-import { formatMoney } from "@/lib/format";
+import { ProductActions } from "@/components/ProductActions";
 import type { Product } from "@/lib/types";
 import { ReadMoreText } from "@/components/ReadMoreText";
 import { LikeButton } from "@/components/LikeButton";
@@ -162,19 +161,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           {/* Description + price + cart */}
           <div className="rounded-3xl border border-black/10 p-5">
             <ReadMoreText text={product.description} />
-            <div className="mt-4 flex items-center justify-between">
-              <div className="text-base font-semibold">{formatMoney(product.price, product.currency)}</div>
-            </div>
-            <div className="mt-5 flex flex-wrap items-center gap-3">
-              <AddToCartButton product={product} />
-              <a
-                href="/cart"
-                className="rounded-full border border-black/15 px-6 py-3 text-xs font-medium uppercase tracking-[0.22em] text-black/80 hover:border-black/30"
-              >
-                View cart
-              </a>
-            </div>
           </div>
+          <ProductActions product={product} />
 
           {/* Intensity bar */}
           <div className="rounded-3xl border border-black/10 p-5">

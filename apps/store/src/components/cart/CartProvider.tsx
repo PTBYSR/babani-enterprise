@@ -3,16 +3,23 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { Product } from "@/lib/types";
 
+export type SelectedVariant = {
+  optionName: string;
+  value: string;
+  price: number;
+};
+
 export type CartLine = {
   product: Product;
   qty: number;
+  selectedVariant?: SelectedVariant;
 };
 
 type CartContextValue = {
   lines: CartLine[];
-  add: (product: Product, qty?: number) => void;
-  remove: (productId: string) => void;
-  setQty: (productId: string, qty: number) => void;
+  add: (product: Product, qty?: number, selectedVariant?: SelectedVariant) => void;
+  remove: (lineKey: string) => void;
+  setQty: (lineKey: string, qty: number) => void;
   clear: () => void;
   totalQty: number;
   isOpen: boolean;
@@ -23,6 +30,13 @@ type CartContextValue = {
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
+
+export function getLineKey(line: CartLine): string {
+  if (line.selectedVariant) {
+    return `${line.product._id}::${line.selectedVariant.optionName}::${line.selectedVariant.value}`;
+  }
+  return line.product._id;
+}
 
 function storageKey() {
   return "babani_cart_v1";
@@ -53,24 +67,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [lines]);
 
   const value = useMemo<CartContextValue>(() => {
-    const add: CartContextValue["add"] = (product, qty = 1) => {
+    const add: CartContextValue["add"] = (product, qty = 1, selectedVariant) => {
+      const lineKey = selectedVariant
+        ? `${product._id}::${selectedVariant.optionName}::${selectedVariant.value}`
+        : product._id;
       setLines((prev) => {
-        const existing = prev.find((l) => l.product._id === product._id);
-        if (!existing) return [...prev, { product, qty }];
-        return prev.map((l) => (l.product._id === product._id ? { ...l, qty: l.qty + qty } : l));
+        const existing = prev.find((l) => getLineKey(l) === lineKey);
+        if (!existing) return [...prev, { product, qty, selectedVariant }];
+        return prev.map((l) => (getLineKey(l) === lineKey ? { ...l, qty: l.qty + qty } : l));
       });
       setIsOpen(true);
-      setToast(`Added ${product.name} to cart`);
+      const variantLabel = selectedVariant ? ` (${selectedVariant.value})` : "";
+      setToast(`Added ${product.name}${variantLabel} to cart`);
     };
 
-    const remove: CartContextValue["remove"] = (productId) => {
-      setLines((prev) => prev.filter((l) => l.product._id !== productId));
+    const remove: CartContextValue["remove"] = (lineKey) => {
+      setLines((prev) => prev.filter((l) => getLineKey(l) !== lineKey));
     };
 
-    const setQty: CartContextValue["setQty"] = (productId, qty) => {
+    const setQty: CartContextValue["setQty"] = (lineKey, qty) => {
       setLines((prev) =>
         prev
-          .map((l) => (l.product._id === productId ? { ...l, qty } : l))
+          .map((l) => (getLineKey(l) === lineKey ? { ...l, qty } : l))
           .filter((l) => l.qty > 0)
       );
     };

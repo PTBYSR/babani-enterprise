@@ -5,6 +5,7 @@ import path from "path";
 import { connectToDatabase, ProductModel } from "@babani/db";
 import type { Product } from "@/lib/types";
 import { SubmitButton } from "@/components/SubmitButton";
+import { VariantsEditor } from "@/components/VariantsEditor";
 
 function getMongoUri() {
   return process.env.MONGODB_URI;
@@ -57,8 +58,15 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
       console.error("MONGODB_URI is missing. Cannot update product.");
       return;
     }
+    // Parse variants
+    let variants: { optionName: string; values: { label: string; price: number }[] }[] = [];
+    try {
+      const raw = String(formData.get("variants") ?? "[]");
+      variants = JSON.parse(raw);
+    } catch { /* ignore */ }
+
     await connectToDatabase(uri);
-    await ProductModel.findByIdAndUpdate(id, { name, description, price, images }, { runValidators: true });
+    await ProductModel.findByIdAndUpdate(id, { name, description, price, images, variants }, { runValidators: true });
 
     redirect("/products");
   }
@@ -159,6 +167,9 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
             ))}
           </div>
         </div>
+
+        {/* Variants */}
+        <VariantsEditor initialVariants={product.variants} />
 
         <SubmitButton
           className="mt-2 inline-flex justify-center rounded-full bg-black px-8 py-3 text-xs font-medium uppercase tracking-[0.22em] text-white hover:bg-black/80 transition-colors"

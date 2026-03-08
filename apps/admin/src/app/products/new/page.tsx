@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { put } from "@vercel/blob";
 import { connectToDatabase, ProductModel } from "@babani/db";
 import { SubmitButton } from "@/components/SubmitButton";
+import { VariantsEditor } from "@/components/VariantsEditor";
 
 export const dynamic = "force-dynamic";
 
@@ -50,8 +51,15 @@ export default function NewProductPage() {
       console.error("MONGODB_URI is missing. Cannot create product.");
       return;
     }
+    // Parse variants
+    let variants: { optionName: string; values: { label: string; price: number }[] }[] = [];
+    try {
+      const raw = String(formData.get("variants") ?? "[]");
+      variants = JSON.parse(raw);
+    } catch { /* ignore */ }
+
     await connectToDatabase(uri);
-    await ProductModel.create({ name, slug, description, price, images });
+    await ProductModel.create({ name, slug, description, price, images, variants });
 
     redirect("/products");
   }
@@ -122,6 +130,9 @@ export default function NewProductPage() {
             ))}
           </div>
         </div>
+
+        {/* Variants */}
+        <VariantsEditor />
 
         <SubmitButton
           className="mt-2 inline-flex justify-center rounded-full bg-black px-8 py-3 text-xs font-medium uppercase tracking-[0.22em] text-white hover:bg-black/80 transition-colors"

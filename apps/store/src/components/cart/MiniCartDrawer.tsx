@@ -3,14 +3,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
-import { useCart } from "@/components/cart/CartProvider";
+import { useCart, getLineKey } from "@/components/cart/CartProvider";
 import { formatMoney } from "@/lib/format";
 
 export function MiniCartDrawer() {
   const cart = useCart();
 
   const subtotal = useMemo(
-    () => cart.lines.reduce((sum, l) => sum + l.product.price * l.qty, 0),
+    () => cart.lines.reduce((sum, l) => {
+      const price = l.selectedVariant?.price ?? l.product.price;
+      return sum + price * l.qty;
+    }, 0),
     [cart.lines]
   );
 
@@ -40,49 +43,58 @@ export function MiniCartDrawer() {
           <div className="mt-8 text-sm text-black/70">Your cart is empty.</div>
         ) : (
           <div className="mt-6 grid gap-4">
-            {cart.lines.map((l) => (
-              <div key={l.product._id} className="flex gap-3 rounded-3xl border border-black/10 p-3">
-                <div className="relative h-16 w-14 overflow-hidden rounded-2xl bg-black/[0.03]">
-                  {(() => {
-                    const imgUrl = l.product.images?.[0]?.url ?? l.product.image?.url ?? "";
-                    const valid = imgUrl.startsWith("/") || (() => { try { new URL(imgUrl); return true; } catch { return false; } })();
-                    if (!valid) return null;
-                    return (
-                      <Image src={imgUrl} alt={l.product.name} fill className="object-cover" />
-                    );
-                  })()}
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm font-medium">{l.product.name}</div>
-                  <div className="mt-1 text-xs text-black/60">
-                    qty {l.qty} · {formatMoney(l.product.price * l.qty, l.product.currency)}
+            {cart.lines.map((l) => {
+              const lineKey = getLineKey(l);
+              const linePrice = l.selectedVariant?.price ?? l.product.price;
+              return (
+                <div key={lineKey} className="flex gap-3 rounded-3xl border border-black/10 p-3">
+                  <div className="relative h-16 w-14 overflow-hidden rounded-2xl bg-black/[0.03]">
+                    {(() => {
+                      const imgUrl = l.product.images?.[0]?.url ?? l.product.image?.url ?? "";
+                      const valid = imgUrl.startsWith("/") || (() => { try { new URL(imgUrl); return true; } catch { return false; } })();
+                      if (!valid) return null;
+                      return (
+                        <Image src={imgUrl} alt={l.product.name} fill className="object-cover" />
+                      );
+                    })()}
                   </div>
-                  <div className="mt-3 flex items-center gap-2">
-                    <button
-                      type="button"
-                      className="h-9 w-9 rounded-full border border-black/15 text-sm hover:border-black/30"
-                      onClick={() => cart.setQty(l.product._id, l.qty - 1)}
-                    >
-                      −
-                    </button>
-                    <button
-                      type="button"
-                      className="h-9 w-9 rounded-full border border-black/15 text-sm hover:border-black/30"
-                      onClick={() => cart.setQty(l.product._id, l.qty + 1)}
-                    >
-                      +
-                    </button>
-                    <button
-                      type="button"
-                      className="ml-auto rounded-full border border-black/15 px-3 py-2 text-xs uppercase tracking-[0.22em] text-black/70 hover:border-black/30"
-                      onClick={() => cart.remove(l.product._id)}
-                    >
-                      Remove
-                    </button>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium">{l.product.name}</div>
+                    {l.selectedVariant && (
+                      <div className="text-[11px] text-black/50">
+                        {l.selectedVariant.optionName}: {l.selectedVariant.value}
+                      </div>
+                    )}
+                    <div className="mt-1 text-xs text-black/60">
+                      qty {l.qty} · {formatMoney(linePrice * l.qty, l.product.currency)}
+                    </div>
+                    <div className="mt-3 flex items-center gap-2">
+                      <button
+                        type="button"
+                        className="h-9 w-9 rounded-full border border-black/15 text-sm hover:border-black/30"
+                        onClick={() => cart.setQty(lineKey, l.qty - 1)}
+                      >
+                        −
+                      </button>
+                      <button
+                        type="button"
+                        className="h-9 w-9 rounded-full border border-black/15 text-sm hover:border-black/30"
+                        onClick={() => cart.setQty(lineKey, l.qty + 1)}
+                      >
+                        +
+                      </button>
+                      <button
+                        type="button"
+                        className="ml-auto rounded-full border border-black/15 px-3 py-2 text-xs uppercase tracking-[0.22em] text-black/70 hover:border-black/30"
+                        onClick={() => cart.remove(lineKey)}
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             <div className="mt-2 rounded-3xl border border-black/10 p-4">
               <div className="flex items-center justify-between text-sm">
@@ -98,9 +110,13 @@ export function MiniCartDrawer() {
                     message += `Hi, I would like to place an order for the following items:\n\n`;
 
                     cart.lines.forEach((l, index) => {
+                      const linePrice = l.selectedVariant?.price ?? l.product.price;
                       message += `${index + 1}. *${l.product.name}* (${l.product.sizeMl}ml ${l.product.concentration})\n`;
+                      if (l.selectedVariant) {
+                        message += `   ${l.selectedVariant.optionName}: ${l.selectedVariant.value}\n`;
+                      }
                       message += `   Quantity: ${l.qty}\n`;
-                      message += `   Price: ${formatMoney(l.product.price * l.qty, l.product.currency)}\n`;
+                      message += `   Price: ${formatMoney(linePrice * l.qty, l.product.currency)}\n`;
                     });
 
                     message += `\n*Subtotal: ${formatMoney(subtotal)}*\n\n`;
