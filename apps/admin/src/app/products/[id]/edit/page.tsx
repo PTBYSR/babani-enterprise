@@ -83,31 +83,31 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         </Link>
       </div>
 
-      <form action={updateProduct} className="mt-10 grid gap-6 rounded-3xl border border-black/10 p-5 md:p-8">
+      <form action={updateProduct} className="mt-10 grid gap-6 rounded-3xl border border-black/10 p-5 md:p-8 overflow-hidden">
         {/* Title */}
-        <label className="grid gap-2 text-sm">
+        <label className="grid gap-2 text-sm min-w-0">
           <span className="font-medium text-black/80">Title</span>
           <input
             name="name"
             defaultValue={product.name}
-            className="h-11 rounded-2xl border border-black/15 px-4 focus:border-black/40 focus:outline-none"
+            className="h-11 w-full rounded-2xl border border-black/15 px-4 focus:border-black/40 focus:outline-none"
             required
           />
         </label>
 
         {/* Description */}
-        <label className="grid gap-2 text-sm">
+        <label className="grid gap-2 text-sm min-w-0">
           <span className="font-medium text-black/80">Description</span>
           <textarea
             name="description"
             defaultValue={product.description}
-            className="min-h-32 rounded-2xl border border-black/15 px-4 py-3 focus:border-black/40 focus:outline-none"
+            className="min-h-32 w-full rounded-2xl border border-black/15 px-4 py-3 focus:border-black/40 focus:outline-none"
             required
           />
         </label>
 
         {/* Price */}
-        <label className="grid gap-2 text-sm">
+        <label className="grid gap-2 text-sm min-w-0">
           <span className="font-medium text-black/80">Price (NGN)</span>
           <input
             name="price"
@@ -115,7 +115,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
             min="0"
             step="0.01"
             defaultValue={product.price}
-            className="h-11 rounded-2xl border border-black/15 px-4 focus:border-black/40 focus:outline-none"
+            className="h-11 w-full rounded-2xl border border-black/15 px-4 focus:border-black/40 focus:outline-none"
             required
           />
         </label>

@@ -123,7 +123,7 @@ export function VariantsEditor({ initialVariants = [] }: VariantsEditorProps) {
                                     </label>
                                     <div className="grid gap-2">
                                         {opt.values.map((val, valIdx) => (
-                                            <div key={valIdx} className="flex items-center gap-2">
+                                            <div key={valIdx} className="flex flex-wrap items-center gap-2">
                                                 <input
                                                     type="text"
                                                     value={val.label}
@@ -131,7 +131,7 @@ export function VariantsEditor({ initialVariants = [] }: VariantsEditorProps) {
                                                         updateValueLabel(optIdx, valIdx, e.target.value)
                                                     }
                                                     placeholder="e.g. Medium"
-                                                    className="h-10 flex-1 rounded-xl border border-black/15 px-3 text-sm focus:border-black/40 focus:outline-none"
+                                                    className="h-10 flex-1 min-w-[120px] rounded-xl border border-black/15 px-3 text-sm focus:border-black/40 focus:outline-none"
                                                 />
                                                 <input
                                                     type="number"
@@ -146,7 +146,7 @@ export function VariantsEditor({ initialVariants = [] }: VariantsEditorProps) {
                                                         )
                                                     }
                                                     placeholder="Price"
-                                                    className="h-10 w-28 rounded-xl border border-black/15 px-3 text-sm focus:border-black/40 focus:outline-none"
+                                                    className="h-10 w-full sm:w-28 rounded-xl border border-black/15 px-3 text-sm focus:border-black/40 focus:outline-none"
                                                 />
                                                 <button
                                                     type="button"
