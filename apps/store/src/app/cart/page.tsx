@@ -133,7 +133,7 @@ export default function CartPage() {
 
                   cart.lines.forEach((l, index) => {
                     const linePrice = l.selectedVariant?.price ?? l.product.price;
-                    message += `${index + 1}. *${l.product.name}* (${l.product.sizeMl}ml ${l.product.concentration})\n`;
+                    message += `${index + 1}. *${l.product.name}*\n`;
                     if (l.selectedVariant) {
                       message += `   ${l.selectedVariant.optionName}: ${l.selectedVariant.value}\n`;
                     }
