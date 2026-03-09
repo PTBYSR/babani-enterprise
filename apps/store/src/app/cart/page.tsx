@@ -71,9 +71,6 @@ export default function CartPage() {
                           {l.selectedVariant.optionName}: {l.selectedVariant.value}
                         </div>
                       )}
-                      <div className="mt-2 text-xs text-black/60">
-                        {l.product.sizeMl}ml · {l.product.concentration}
-                      </div>
 
                       <div className="mt-4 flex items-center justify-between gap-4">
                         <div className="flex items-center gap-2">

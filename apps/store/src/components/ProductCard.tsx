@@ -30,10 +30,7 @@ export function ProductCard({ product }: { product: Product }) {
           {product.brand}
         </div>
         <div className="mt-1 text-sm font-medium tracking-wide">{product.name}</div>
-        <div className="mt-2 flex items-center justify-between text-xs text-black/60">
-          <span>
-            {product.sizeMl}ml · {product.concentration}
-          </span>
+        <div className="mt-2 flex items-center justify-end text-xs text-black/60">
           <span className="text-black">{formatMoney(product.price, product.currency)}</span>
         </div>
       </div>
