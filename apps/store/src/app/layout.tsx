@@ -8,6 +8,7 @@ import { CartProvider } from "@/components/cart/CartProvider";
 import { MiniCartDrawer } from "@/components/cart/MiniCartDrawer";
 import { Toast } from "@/components/cart/Toast";
 import { FloatingWhatsAppWidget } from "@/components/FloatingWhatsAppWidget";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -69,6 +70,7 @@ export default function RootLayout({
             <MiniCartDrawer />
             <Toast />
             <FloatingWhatsAppWidget />
+            <Analytics />
           </div>
         </CartProvider>
       </body>
