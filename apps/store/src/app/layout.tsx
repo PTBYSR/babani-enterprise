@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     images: ["/BABANI.png"],
   },
   icons: {
-    icon: "/next.svg", // Using existing next.svg as placeholder icon, recommend replacing with BABANI.png later
+    icon: "/BABANI.ico",
   },
 };
 
